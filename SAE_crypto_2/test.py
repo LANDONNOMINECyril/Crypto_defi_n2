@@ -205,7 +205,7 @@ def cassage2SDESastucieux(message_crypte, message_clair):
 
 
 '''fonctionne : '''
-mottest = "mangez"
+mottest = "LETTRE I USBEK À SON AMI RUSTAN. À Ispahan. Nous n’avons séjourné qu’un jour à Com. Lorsque nous eûmes fait nos dévotions sur le tombeau de la vierge qui a mis au monde douze prophètes, nous nous remîmes en chemin, et hier, vingt-cinquième jour de notre départ d’Ispahan, nous arrivâmes à Tauris. Rica et moi sommes peut-être les premiers parmi les Persans que l’envie de savoir ait fait sortir de leur pays, et qui aient renoncé aux douceurs d’une vie tranquille pour aller chercher laborieusement la sagesse. Nous sommes nés dans un royaume florissant ; mais nous n’avons pas cru que ses bornes fussent celles de nos connoissances, et que la lumière orientale dût seule nous éclairer. Mande-moi ce que l’on dit de notre voyage ; ne me flatte point : je ne compte pas sur un grand nombre d’approbateurs. Adresse ta lettre à Erzeron, où je séjournerai quelque temps. Adieu, mon cher Rustan. Sois assuré qu’en quelque lieu du monde où je sois, tu as un ami fidèle. De Tauris, le 15 de la lune de Saphar, 1711."
 print(bytes_to_str(int_from_bytes(mottest)))
 print(cryptage_simple_mot(mottest,0b1100001110))
 mott = cryptage_simple_mot(mottest,0b1100001110)
