@@ -192,38 +192,10 @@ def cassage2SDESbrutal(message_crypte, message_clair):
                         return (premiere_cle, deuxieme_cle)
     return None
 
-def cassage2SDESastucieux(message_crypte, message_clair):
-    cle1 = creation_cles(10)
-    cle2 = creation_cles(10)
-    for premiere_cle in cle1:
-        for deuxieme_cle in cle2:
-            for i in range(len(message_crypte)):
-                if encryptage(premiere_cle, message_clair[i]) != decryptage(deuxieme_cle, message_crypte[i]) :
-                    break
-                else:
-                    if i == len(message_crypte) - 1:
-                        return (premiere_cle, deuxieme_cle)
-    return None
-
 '''fonctionne pas :'''
 
 
 '''fonctionne : '''
-# print(0b0000000000)
-# print(encryptage(0b10101010,0b0000000000 ))
-# print(decryptage(0b10101010,encryptage(0b10101010,0b0000000000)))
-# print(cryptage2SDES(0b0000000000,0b1110001110,0b10101010))
-# print(decryptage2SDES(0b0000101000,0b1110001110,0b10101010))
-# print(type(0b0000101000))
-# binary_string = "0000101000"
-# binary_number = int(binary_string, 10)
-# print(binary_number)
-# binary_number = format(20, '010b')  # '00000010100'
-# print(type(binary_number))
-# print(0b1110001110, 0b10101010)
-# print(0b0000000000,0b1110001110, 0b10101010)
-# print(cryptage2SDES(0b0000000000,0b1110001110, 0b10101010))
-# print (type(0b0000000001))
 
 mottest = "mangez"
 print(int_from_bytes(mottest))
@@ -231,7 +203,4 @@ messagecrypte = cryptage_mot(mottest,0b1100001110, 0b10001010)
 print(messagecrypte)
 messagedecrypte = decryptage_mot(messagecrypte,0b1100001110, 0b10001010)
 print(messagedecrypte)
-# print(cassage2SDESbrutal(messagecrypte,messagedecrypte))
-print("suite")
-print(cassage2SDESastucieux(messagecrypte,messagedecrypte))
-print("résultat attendu :",0b1100001110, 0b10001010)
+print(cassage2SDESbrutal(messagecrypte,messagedecrypte))
