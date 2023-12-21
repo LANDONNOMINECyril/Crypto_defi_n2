@@ -144,8 +144,7 @@ def decryptage(cle, texte_crypte):
     # print("Elapsed time for 1,000 encryptions: {:0.3f}s".format(t2 - t1))
     # exit()
     
-def creation_cles(j):
-    return [i for i in range(2**j)]
+
 
 def cryptage2SDES(texte_clair,cle,cle2):
     encrypte1 = encryptage(cle, texte_clair)
@@ -158,38 +157,13 @@ def decryptage2SDES(cypher_text,cle,cle2):
     decrypte2 = decryptage(cle, decrypte1)
     return decrypte2
 
-
+def creation_cles(j):
+    return [i for i in range(2**j)]
 
 def int_from_bytes(input_string):
     liste = []
     for char in input_string:
         liste.append(int.from_bytes(bytes(char,'utf-8'),'big'))
-    return liste
-
-def bytes_to_str(input_list):
-    result = ''
-    for num in input_list:
-        try:
-            # Essayez de décoder l'octet en tant que caractère UTF-8
-            char = num.to_bytes((num.bit_length() + 7) // 8, 'big').decode('utf-8')
-            # Si le décodage réussit, ajoutez le caractère au résultat
-            result += char
-        except UnicodeDecodeError:
-            # Si le décodage échoue, ajoutez l'entier au résultat
-            result += str(num) + ' '
-    return result.strip()
-
-def cryptage_simple_mot(mot,cle1):
-    liste= []
-    mot_chiffre = int_from_bytes(mot)
-    for chiffre in mot_chiffre:
-        liste.append(encryptage(cle1,chiffre))
-    return liste
-    
-def decryptage_simple_mot(texte_chiffre,cle1):
-    liste= []
-    for chiffre in texte_chiffre:
-        liste.append(decryptage(cle1,chiffre))
     return liste
 
 def cryptage_mot(mot, cle1, cle2):
@@ -201,10 +175,9 @@ def cryptage_mot(mot, cle1, cle2):
     
 def decryptage_mot(texte_chiffre, cle1, cle2):
     liste = []
-    mot = int_from_bytes(texte_chiffre)
-    for chiffre in mot:
+    for chiffre in texte_chiffre:
         liste.append(decryptage2SDES(chiffre,cle1,cle2))
-    return bytes_to_str(liste)
+    return liste
 
 def cassage2SDESbrutal(message_crypte, message_clair):
     cle1 = creation_cles(10)
@@ -221,12 +194,15 @@ def cassage2SDESbrutal(message_crypte, message_clair):
 
 def cassage2SDESastucieux(message_crypte, message_clair):
     cle1 = creation_cles(10)
-    dico = dict()
+    cle2 = creation_cles(10)
     for premiere_cle in cle1:
-        t1 = tuple(cryptage_simple_mot(message_clair,premiere_cle))
-        dico[t1] = premiere_cle
-        if tuple(decryptage_simple_mot(message_crypte,premiere_cle)) in dico.keys():
-            return (dico[tuple(decryptage_simple_mot(message_crypte,premiere_cle))], premiere_cle)
+        for deuxieme_cle in cle2:
+            for i in range(len(message_crypte)):
+                if encryptage(premiere_cle, message_clair[i]) != decryptage(deuxieme_cle, message_crypte[i]) :
+                    break
+                else:
+                    if i == len(message_crypte) - 1:
+                        return (premiere_cle, deuxieme_cle)
     return None
 
 '''fonctionne pas :'''
@@ -250,15 +226,12 @@ def cassage2SDESastucieux(message_crypte, message_clair):
 # print (type(0b0000000001))
 
 mottest = "mangez"
-print(bytes_to_str(int_from_bytes(mottest)))
-print(cryptage_simple_mot(mottest,0b1100001110))
-mott = cryptage_simple_mot(mottest,0b1100001110)
-print(decryptage_simple_mot(mott,0b1100001110))
-messagecrypte = cryptage_mot(mottest,0b1100001110, 0b1110001110)
+print(int_from_bytes(mottest))
+messagecrypte = cryptage_mot(mottest,0b1100001110, 0b10001010)
 print(messagecrypte)
-# messagedecrypte = decryptage_mot(messagecrypte,0b1100001110, 0b10001010)
-# print(messagedecrypte)
+messagedecrypte = decryptage_mot(messagecrypte,0b1100001110, 0b10001010)
+print(messagedecrypte)
 # print(cassage2SDESbrutal(messagecrypte,messagedecrypte))
 print("suite")
-print(cassage2SDESastucieux(messagecrypte,mottest))
-print("résultat attendu :",0b1100001110, 0b1110001110)
+print(cassage2SDESastucieux(messagecrypte,messagedecrypte))
+print("résultat attendu :",0b1100001110, 0b10001010)
